@@ -3,6 +3,12 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var pg     = require('pg');
+
+// attempt to connect to the database
+var pgConString = "postgres://retroadmin:password@localhost:5432/retroctf";
+var pgClient = new pg.Client(pgConString);
+pgClient.connect();
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -10,6 +16,7 @@ var loginRouter = require('./routes/login');
 var logoutRouter = require('./routes/logout');
 
 var app = express();
+app.set('pgcli', pgClient);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

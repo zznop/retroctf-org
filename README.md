@@ -3,6 +3,10 @@
 # Database Setup
 
 ```
+CREATE DATABASE "retroctf";
+CREATE USER retroadmin WITH PASSWORD 'password';
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO retroadmin;
+
 CREATE TABLE users (
  id UUID NOT NULL,
  username CHAR(64) NOT NULL,
