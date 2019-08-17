@@ -1,21 +1,23 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
-var pg     = require('pg');
+const createError = require('http-errors');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const session = require('express-session');
+const logger = require('morgan');
+const pg = require('pg');
 
 // attempt to connect to the database
-var pgConString = "postgres://retroadmin:password@localhost:5432/retroctf";
-var pgClient = new pg.Client(pgConString);
+const pgConString = "postgres://retroadmin:password@localhost:5432/retroctf";
+const pgClient = new pg.Client(pgConString);
 pgClient.connect();
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-var loginRouter = require('./routes/login');
-var logoutRouter = require('./routes/logout');
+const indexRouter = require('./routes/index');
+const usersRouter = require('./routes/users');
+const loginRouter = require('./routes/login');
+const logoutRouter = require('./routes/logout');
+const signupRouter = require('./routes/signup');
 
-var app = express();
+const app = express();
 app.set('pgcli', pgClient);
 
 // view engine setup
@@ -25,6 +27,7 @@ app.set('view engine', 'jade');
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(session({ secret: '1234abcd' })); // TODO: make this secure
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -32,6 +35,7 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/login', loginRouter);
 app.use('/logout', logoutRouter);
+app.use('/signup', signupRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

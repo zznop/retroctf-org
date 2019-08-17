@@ -1,40 +1,38 @@
-var express = require('express');
-var router = express.Router();
-
-function validateEmail(email) {
-    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    return re.test(String(email).toLowerCase());
-}
-
-async function queryHashByEmail(client, email) {
-  var query = await client.query(
-    'SELECT * FROM users WHERE email = $1', [email,]
-  );
-
-  if (query.rows.length == 0)
-    return null;
-
-  query.rows.forEach(row=>{
-    console.log(row);
-  });
-}
+const express = require('express');
+const crypto = require('crypto');
+const authUtils = require('../auth-utils');
+const router = express.Router();
 
 router.get('/', function(req, res, next) {
   res.render('login', { title: 'Retro CTF', status: req.query.status });
 });
 
-router.post('/', function(req, res, next) {
-  // check that the email address is valid format
-  if (!validateEmail(req.body.email))
-    res.redirect('/login?status=' + encodeURIComponent('Invalid email'));
+router.post('/', async function(req, res, next) {
+  if (!authUtils.validateEmail(req.body.email)) {
+    res.redirect(
+      '/login?status=' + encodeURIComponent('Invalid email')
+    );
+  }
 
-  // check that the email exists
-  task = queryHashByEmail(req.app.get('pgcli'), req.body.email)
-  if (task.WaitAndUnwrapException() == null)
-    res.redirect('/login?status=' + encodeURIComponent('Email does not exist'));
+  let query = await req.app.get('pgcli').query(
+    'SELECT * FROM users WHERE email = $1', [req.body.email]
+  );
 
-  console.log(req.body.email);
-  console.log(req.body.password);
+  // any hits in the db?
+  if (query.rows.length == 0) {
+    res.redirect(
+      '/login?status=' + encodeURIComponent('Email does not exist')
+    );
+  }
+
+  // hash the password and compare it
+  let hash = crypto.createHash('sha256').update(req.body.password).digest('hex');
+  if (query.rows[0].password != hash) {
+      res.redirect('/login?status=' + encodeURIComponent('Incorrect password'));
+  }
+
+  req.session.authenticated = true;
+  res.redirect('/');
 });
 
 module.exports = router;

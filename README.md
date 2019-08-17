@@ -1,5 +1,14 @@
 # retroctf.org
 
+# Dependencies
+
+```
+npm install express
+npm install crypto
+npm install pg
+npm install express-session
+```
+
 # Database Setup
 
 ```
@@ -17,5 +26,5 @@ CREATE TABLE users (
 );
 
 INSERT INTO users (id, username, email, password, role)
-  VALUES ('b7ae4d1e-01ee-4b74-8b12-3bc8051d7c38', 'zznop', 'zznop0x90@gmail.com', '5E884898DA28047151D0E56F8DC6292773603D0D6AABBDD62A11EF721D1542D8', 1);
+  VALUES ('b7ae4d1e-01ee-4b74-8b12-3bc8051d7c38', 'zznop', 'zznop0x90@gmail.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 1);
 ```

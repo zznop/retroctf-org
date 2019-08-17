@@ -5,10 +5,14 @@ block content
     .row
       .col-md-6.col-md-offset-3
         h1.display-4.m-b-2 Log In
-        form(method='POST' action='/login')
+        form(method='POST' action='/signup')
+          div.form-group
+            input.form-control(type='text' id='email' placeholder='Username' name='username')
           div.form-group
             input.form-control(type='text' id='email' placeholder='Email' name='email')
           div.form-group
             input.form-control(type='password' id='password' placeholder='Password' name='password')
-          button.btn.btn-primary(type='submit') Log in
+          div.form-group
+            input.form-control(type='password' id='confirmpassword' placeholder='Confirm' name='confirmpassword')
+          button.btn.btn-primary(type='submit') Sign Up
           h4(style="color: red;") #{status}
