@@ -7,6 +7,7 @@ npm install express
 npm install crypto
 npm install pg
 npm install express-session
+npm install uuid
 ```
 
 # Database Setup

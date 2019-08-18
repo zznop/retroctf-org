@@ -14,11 +14,12 @@ router.post('/', async function(req, res, next) {
     );
   }
 
+  // query credentials from supplied email
   let query = await req.app.get('pgcli').query(
-    'SELECT * FROM users WHERE email = $1', [req.body.email]
+    'SELECT * FROM users WHERE email = $1', [String(req.body.email).toLowerCase()]
   );
 
-  // any hits in the db?
+  // redirect if the email doesn't exist
   if (query.rows.length == 0) {
     res.redirect(
       '/login?status=' + encodeURIComponent('Email does not exist')

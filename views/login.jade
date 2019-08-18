@@ -7,7 +7,7 @@ block content
         h1.display-4.m-b-2 Log In
         form(method='POST' action='/login')
           div.form-group
-            input.form-control(type='text' id='email' placeholder='Email' name='email')
+            input.form-control(type='text' id='email' placeholder='Email' name='email' maxlength='128')
           div.form-group
             input.form-control(type='password' id='password' placeholder='Password' name='password')
           button.btn.btn-primary(type='submit') Log in
