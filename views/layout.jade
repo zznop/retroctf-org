@@ -4,6 +4,16 @@ html
     title= title
     link(rel='stylesheet', href='/stylesheets/style.css')
     link(rel='stylesheet', href='/stylesheets/bootstrap.min.css')
+    script(src='/javascripts/jquery.min.js')
     script(src='/javascripts/bootstrap.min.js')
+
   body
+    nav.navbar.navbar-inverse.navbar-fixed-top
+      div.container-fluid
+        div.navbar-header
+          a.navbar-brand(href='/index') Retro CTF
+        ul.nav
+          li
+            a(href='/logout') Logout
+
     block content
