@@ -6,9 +6,13 @@ const router = express.Router();
 
 router.get('/', function(req, res, next) {
   if (req.session.authenticated == true)
-    res.redirect('/index');
+    res.redirect('/');
 
-  res.render('signup', {title: 'Retro CTF', status: req.query.status });
+  res.render('signup', {
+    title: 'Retro CTF',
+    status: req.query.status,
+    authenticated: req.session.authenticated
+  });
 });
 
 router.post('/', async function(req, res, next) {
@@ -29,6 +33,13 @@ router.post('/', async function(req, res, next) {
   if (!authUtils.validateUsername(req.body.username)) {
     res.redirect(
       '/signup?status=' + encodeURIComponent('Invalid username')
+    );
+  }
+
+  // ensure the password is long enough
+  if (req.body.password.length < 12) {
+    res.redirect(
+      '/signup?status=' + encodeURIComponent('Password must contain atleast 12 characters')
     );
   }
 

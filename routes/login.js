@@ -4,7 +4,11 @@ const authUtils = require('../auth-utils');
 const router = express.Router();
 
 router.get('/', function(req, res, next) {
-  res.render('login', { title: 'Retro CTF', status: req.query.status});
+  res.render('login', {
+	  title: 'Retro CTF',
+	  status: req.query.status,
+	  authenticated : req.session.authenticated
+  });
 });
 
 router.post('/', async function(req, res, next) {
