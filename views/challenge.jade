@@ -4,10 +4,11 @@ block content
   .main.container
     .row.justify-content-center
       .col-md-6.col-md-offset-3
-        h1.display-4.m-b-2 #{challenge}
-        p #{details}
-        form(method='POST' action='/challenge')
-          div.form-group
-            input.form-control(type='text' id='flag' placeholder='flag{d9a7eae0525603bead5ada6043110aa9de433064}')
-          p.text-danger #{errmsg}
-          button.btn.btn-primary(type='submit') Capture the Flag
+        div.jumbotron
+          h1.display-4.m-b-2 #{challenge}
+          p #{details}
+          form(method='POST' action='/challenge')
+            div.form-group
+              input.form-control(type='text' id='flag' placeholder='flag{d9a7eae0525603bead5ada6043110aa9de433064}')
+            p.text-danger #{errmsg}
+            button.btn.btn-primary(type='submit') Capture the Flag
