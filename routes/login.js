@@ -5,9 +5,10 @@ const router = express.Router();
 
 router.get('/', function(req, res, next) {
   res.render('login', {
-	  title: 'Retro CTF',
-	  status: req.query.status,
-	  authenticated : req.session.authenticated
+    title: 'Retro CTF',
+    status: req.query.status,
+    authenticated: req.session.authenticated,
+    is_admin: req.session.admin,
   });
 });
 
@@ -37,6 +38,13 @@ router.post('/', async function(req, res, next) {
   }
 
   req.session.authenticated = true;
+  req.session.uuid = query.rows[0].id;
+  if (query.rows[0].role == 1) {
+    req.session.admin = true;
+  } else {
+    req.session.admin = false;
+  }
+
   res.redirect('/');
 });
 

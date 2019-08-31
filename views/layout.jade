@@ -8,13 +8,16 @@ html
     script(src='/javascripts/bootstrap.min.js')
 
   body
-    nav.navbar.navbar-inverse.navbar-fixed-top
+    div.navbar.navbar-expand-lg.fixed-top.navbar-dark.bg-dark
       div.container
         if authenticated
-          div.navbar-header
-            a.navbar-brand(href='/') Dashboard
-          ul.navbar-nav
-            li.nav-item
-              a(href='/logout') Logout
+          a.navbar-brand(href='/') Dashboard
+          div.collapse.navbar-collapse
+            ul.navbar-nav
+              if is_admin
+                li.nav-item
+                  a.nav-link(href='/admin') Admin
+              li.nav-item
+                a.nav-link(href='/logout') Logout
     div.container
       block content

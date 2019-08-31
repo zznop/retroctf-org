@@ -7,8 +7,9 @@ router.get('/', function(req, res, next) {
     res.redirect('/login');
   else
     res.render('index', {
-	    title: 'Retro CTF',
-	    authenticated: req.session.authenticated
+      title: 'Retro CTF',
+      authenticated: req.session.authenticated,
+      is_admin: req.session.admin,
     });
 });
 

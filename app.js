@@ -28,7 +28,13 @@ app.set('view engine', 'jade');
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(session({ secret: '1234abcd' })); // TODO: make this secure
+
+app.use(session({
+  secret: '8684911f-60f0-4bd2-8f59-5ea3190cc249',
+  resave: false,
+  saveUninitialized: false,
+}));
+
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 

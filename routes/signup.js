@@ -11,7 +11,8 @@ router.get('/', function(req, res, next) {
   res.render('signup', {
     title: 'Retro CTF',
     status: req.query.status,
-    authenticated: req.session.authenticated
+    authenticated: req.session.authenticated,
+    is_admin: req.session.admin,
   });
 });
 
@@ -71,14 +72,17 @@ router.post('/', async function(req, res, next) {
 
   // insert everything into the database
   query = await req.app.get('pgcli').query(
-    'INSERT INTO users (id, username, email, password, role) ' +
-    'VALUES ($1, $2, $3, $4, $5)',
+    'INSERT INTO users (id, username, email, password, role, enabled) ' +
+    'VALUES ($1, $2, $3, $4, $5, $6)',
     [
-      uuid, req.body.username, req.body.email.toLowerCase(), hash, 0
+      uuid, req.body.username, req.body.email.toLowerCase(),
+      hash, 0, true
     ]
   );
 
+  req.session.uuid = uuid;
   req.session.authenticated = true;
+  req.session.admin = false;
   res.redirect('/');
 });
 

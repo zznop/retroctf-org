@@ -6,3 +6,8 @@ body {
 a {
   color: #00B7FF;
 }
+
+#challengeCard {
+  width: 20rem;
+  height: 10rem;
+}
