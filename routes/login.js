@@ -17,6 +17,7 @@ router.post('/', async function(req, res, next) {
     res.redirect(
       '/login?status=' + encodeURIComponent('Invalid email')
     );
+    return;
   }
 
   // query credentials from supplied email
@@ -29,12 +30,14 @@ router.post('/', async function(req, res, next) {
     res.redirect(
       '/login?status=' + encodeURIComponent('Email does not exist')
     );
+    return;
   }
 
   // hash the password and compare it
   let hash = crypto.createHash('sha256').update(req.body.password).digest('hex');
   if (query.rows[0].password != hash) {
-      res.redirect('/login?status=' + encodeURIComponent('Incorrect password'));
+    res.redirect('/login?status=' + encodeURIComponent('Incorrect password'));
+    return;
   }
 
   req.session.authenticated = true;

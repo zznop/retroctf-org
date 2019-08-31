@@ -5,8 +5,10 @@ const authUtils = require('../auth-utils');
 const router = express.Router();
 
 router.get('/', function(req, res, next) {
-  if (req.session.authenticated == true)
+  if (req.session.authenticated == true) {
     res.redirect('/');
+    return;
+  }
 
   res.render('signup', {
     title: 'Retro CTF',
@@ -21,6 +23,7 @@ router.post('/', async function(req, res, next) {
     res.redirect(
       '/signup?status=' + encodeURIComponent('Passwords are not identical')
     );
+    return;
   }
 
   // ensure the email is valid
@@ -28,6 +31,7 @@ router.post('/', async function(req, res, next) {
     res.redirect(
       '/signup?status=' + encodeURIComponent('Invalid email')
     );
+    return;
   }
 
   // ensure the username is valid
@@ -35,6 +39,7 @@ router.post('/', async function(req, res, next) {
     res.redirect(
       '/signup?status=' + encodeURIComponent('Invalid username')
     );
+    return;
   }
 
   // ensure the password is long enough
@@ -42,6 +47,7 @@ router.post('/', async function(req, res, next) {
     res.redirect(
       '/signup?status=' + encodeURIComponent('Password must contain atleast 12 characters')
     );
+    return;
   }
 
   // ensure email isn't already in use
@@ -53,6 +59,7 @@ router.post('/', async function(req, res, next) {
     res.redirect(
       '/signup?status=' + encodeURIComponent('Email already exists')
     );
+    return;
   }
 
   // ensure username isn't already in use
@@ -64,6 +71,7 @@ router.post('/', async function(req, res, next) {
     res.redirect(
       '/signup?status=' + encodeURIComponent('Username already exists')
     );
+    return;
   }
 
   // hash password and generate a UUID
