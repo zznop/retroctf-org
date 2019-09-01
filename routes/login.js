@@ -8,7 +8,7 @@ router.get('/', function(req, res, next) {
     title: 'Retro CTF',
     status: req.query.status,
     authenticated: req.session.authenticated,
-    is_admin: req.session.admin,
+    isAdmin: req.session.admin,
   });
 });
 

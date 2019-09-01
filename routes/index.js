@@ -9,7 +9,7 @@ router.get('/', function(req, res, next) {
     res.render('index', {
       title: 'Retro CTF',
       authenticated: req.session.authenticated,
-      is_admin: req.session.admin,
+      isAdmin: req.session.admin,
     });
 });
 

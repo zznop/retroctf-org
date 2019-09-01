@@ -10,6 +10,12 @@ block content
           p #{details}
           form(method='POST' action='/challenge/#{route}')
             div.form-group
-              input.form-control(type='text' id='flag' name='flag' placeholder='flag{d9a7eae0525603bead5ada6043110aa9de433064}')
+              if solved
+                input.form-control(type='text' id='flag' name='flag' placeholder='flag{d9a7eae0525603bead5ada6043110aa9de433064}' disabled)
+              else
+                input.form-control(type='text' id='flag' name='flag' placeholder='flag{d9a7eae0525603bead5ada6043110aa9de433064}')
             p.text-danger #{errmsg}
-            button.btn.btn-primary(type='submit') Capture the Flag
+            if solved
+              button.btn.btn-success(type='submit' disabled) Solved!
+            else
+              button.btn.btn-primary(type='submit') Capture the Flag
