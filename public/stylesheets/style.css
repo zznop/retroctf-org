@@ -11,3 +11,7 @@ a {
   width: 20rem;
   height: 10rem;
 }
+
+#logo {
+  margin: 8px 8px 12px 8px;
+}
