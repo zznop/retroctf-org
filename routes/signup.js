@@ -43,9 +43,10 @@ router.post('/', async function(req, res, next) {
   }
 
   // ensure the password is long enough
-  if (req.body.password.length < 12) {
+  if (req.body.password.length < 8) {
     res.redirect(
-      '/signup?status=' + encodeURIComponent('Password must contain atleast 12 characters')
+      '/signup?status=' +
+      encodeURIComponent('Password must contain atleast 8 characters')
     );
     return;
   }

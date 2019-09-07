@@ -31,6 +31,48 @@ router.get('/', async function(req, res, next) {
   });
 });
 
+router.post('/newpass', async function(req, res, next) {
+  if (req.body.newpassword.length < 8) {
+    res.redirect(
+      '/account?passwordStatus=' +
+      encodeURIComponent('Password must contain atleast 8 characters')
+    );
+    return;
+  }
+
+  if (req.body.newpassword != req.body.confirmpassword) {
+    res.redirect(
+      '/account?passwordStatus=' +
+      encodeURIComponent('Confirmation password must match the new password!')
+    );
+  }
+
+  let query = await req.app.get('pgcli').query(
+    'SELECT * FROM users WHERE id = $1', [req.session.uuid]
+  );
+
+  const currPassHash =
+    crypto.createHash('sha256').update(req.body.currpassword).digest('hex');
+  if (query.rows[0].password != currPassHash) {
+    res.redirect(
+      '/account?passwordStatus=' + encodeURIComponent('Current password is incorrect')
+    );
+    return;
+  }
+
+  const newPassHash =
+    crypto.createHash('sha256').update(req.body.newpassword).digest('hex');
+
+  query = await req.app.get('pgcli').query(
+    'UPDATE users SET password=$1 WHERE id=$2',
+    [newPassHash, req.session.uuid],
+  );
+
+  res.redirect(
+    '/account?passwordStatus=' + encodeURIComponent('Password updated successfully!')
+  );
+});
+
 router.post('/newemail', async function(req, res, next) {
   if (authUtils.validateEmail(req.body.email) == false) {
     res.redirect(
@@ -56,7 +98,6 @@ router.post('/newemail', async function(req, res, next) {
       '/account?emailStatus=' + encodeURIComponent('Password is incorrect')
     );
     return;
-    
   }
 
   // Insert the new email
@@ -68,7 +109,6 @@ router.post('/newemail', async function(req, res, next) {
   res.redirect(
     '/account?emailStatus=' + encodeURIComponent('Email updated successfully!')
   );
-
 });
 
 module.exports = router;
