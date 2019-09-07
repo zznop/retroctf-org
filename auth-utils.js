@@ -17,3 +17,15 @@ exports.validateUsername = function(username) {
 
   return re.test(String(username));
 }
+
+exports.emailInUse = async function(cli, email) {
+  const query = await cli.query(
+    'SELECT * FROM users WHERE email = $1', [email.toLowerCase()]
+  );
+
+  if (query.rows.length != 0) {
+    return false;
+  }
+
+  return true;
+}

@@ -51,19 +51,15 @@ router.post('/', async function(req, res, next) {
   }
 
   // ensure email isn't already in use
-  let query = await req.app.get('pgcli').query(
-    'SELECT * FROM users WHERE email = $1', [req.body.email.toLowerCase()]
-  );
-
-  if (query.rows.length != 0) {
+  if (authUtils.emailInUse(req.app.get('pgcli'), req.body.email) == true) {
     res.redirect(
-      '/signup?status=' + encodeURIComponent('Email already exists')
+      '/signup?status=' + encodeURIComponent('Email already in use')
     );
     return;
   }
 
   // ensure username isn't already in use
-  query = await req.app.get('pgcli').query(
+  const query = await req.app.get('pgcli').query(
     'SELECT * FROM users WHERE username = $1', [req.body.username]
   );
 

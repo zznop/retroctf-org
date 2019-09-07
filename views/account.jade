@@ -1,0 +1,31 @@
+extends layout
+
+block content
+  .main.container
+    .row.justify-content-center
+      .col-md-6.col-md-offset-3
+        h1 Account Settings
+        form(method='POST' action='/account/newemail')
+          div.form-group
+            label Username and Email
+          div.form-group
+            input.form-control(type='text' id='username' value='#{username}' name='username', disabled)
+          div.form-group
+            input.form-control(type='text' id='email' value='#{email}' name='email' maxlength='128')
+          div.form-group
+            input.form-control(type='password' id='currpassword' placeholder='Current Password' name='password')
+          p.text-danger #{emailStatus}
+          button.btn.btn-primary(type='submit') Update email
+    .row.justify-content-center
+      .col-md-6.col-md-offset-3(id='newPassDiv')
+        form(method='POST' action='/account/newpass')
+          div.form-group
+            label Password
+          div.form-group
+            input.form-control(type='password' id='currpassword' placeholder='Current Password' name='password')
+          div.form-group
+            input.form-control(type='password' id='newpassword' placeholder='New Password' name='password')
+          div.form-group
+            input.form-control(type='password' id='confirmpassword' placeholder='Confirm Password' name='confirmpassword')
+          p.text-danger #{passwordStatus}
+          button.btn.btn-primary(type='submit') Update password
