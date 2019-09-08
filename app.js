@@ -5,9 +5,12 @@ const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const logger = require('morgan');
 const pg = require('pg');
+const config = require('./config');
 
-// attempt to connect to the database
-const pgConString = "postgres://retroadmin:password@localhost:5432/retroctf";
+// Connect to database
+const pgConString = 'postgres://' + config.db.user +
+  ':' + config.db.secret + '@' + config.db.host +
+  ':' + config.db.port + '/' + config.db.name;
 const pgClient = new pg.Client(pgConString);
 pgClient.connect();
 

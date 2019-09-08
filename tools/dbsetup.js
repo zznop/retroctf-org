@@ -42,16 +42,6 @@ async function setupDatabase() {
     );
 
     await pgClient.query(
-      'INSERT INTO users (id, username, email, password, role, enabled) ' +
-      'VALUES ($1, $2, $3, $4, $5, $6)',
-      [
-        'b7ae4d1e-01ee-4b74-8b12-3bc8051d7c38', 'admin', 'admin@retroctf.org',
-        '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 1,
-        true
-      ]
-    );
-
-    await pgClient.query(
       'INSERT INTO challenges (id, challname, filename, route, author, ' +
       'description, longdescription, flag) ' +
       'VALUES ($1, $2, $3, $4, $5, $6, $7, $8)',
