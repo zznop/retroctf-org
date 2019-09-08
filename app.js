@@ -22,6 +22,7 @@ const signupRouter = require('./routes/signup');
 const challengeRouter = require('./routes/challenge');
 const accountRouter = require('./routes/account');
 const donateRouter = require('./routes/donate');
+const scoreboardRouter = require('./routes/scoreboard');
 
 const app = express();
 app.set('pgcli', pgClient);
@@ -51,6 +52,7 @@ app.use('/signup', signupRouter);
 app.use('/challenge', challengeRouter);
 app.use('/account', accountRouter);
 app.use('/donate', donateRouter);
+app.use('/scoreboard', scoreboardRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

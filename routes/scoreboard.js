@@ -1,0 +1,30 @@
+const express = require('express');
+const router = express.Router();
+
+router.get('/', async function(req, res, next) {
+  if (!req.session || !req.session.authenticated)
+    res.redirect('/login');
+
+  let query = await req.app.get('pgcli').query(
+    'SELECT uid, count(*) as solvecnt FROM solves GROUP BY uid ORDER BY solvecnt desc'
+  );
+
+  let solves = query;
+  for (i = 0; i < solves.rows.length; i++) {
+    query = await req.app.get('pgcli').query(
+      'SELECT username FROM users WHERE id = $1',
+      [solves.rows[i].uid]
+    );
+
+    solves.rows[i].rank = i + 1;
+    solves.rows[i].uid = query.rows[0].username;
+  }
+
+  res.render('scoreboard', {
+    title: 'Retro CTF',
+    authenticated: req.session.authenticated,
+    solvers: solves.rows
+  });
+});
+
+module.exports = router;

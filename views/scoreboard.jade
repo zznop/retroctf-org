@@ -1,0 +1,18 @@
+extends layout
+
+block content
+  .main.container
+    .row.justify-content-center
+      .col-md-12
+        h1.display-4.m-b-2 Scoreboard
+        table.table.table-hover
+          thead
+            th(scope='col') Rank
+            th(scope='col') User
+            th(scope='col') Solves
+          tbody
+          each solver in solvers
+            tr
+              td #{solver.rank}
+              td #{solver.uid}
+              td #{solver.solvecnt}
