@@ -1,0 +1,21 @@
+extends layout
+
+block content
+  .main.container
+    .row.justify-content-center(id='donateRow')
+      .col.md-6
+        h2 Donating Cheese
+    .row.justify-content-center(id='donateRow')
+      .col.md-6
+        p(id='donateParagraph') I (zznop) happily accept donations! Developing the web platform and challenges for Retro CTF is no small task. All donations will go towards improving the platform and keeping the infrastructure running.
+      .col.md-6
+
+        a(href="https://www.patreon.com/bePatron?u=22923133" data-patreon-widget-type="become-patron-button")
+          img(src='/images/patreon.png' alt='Patreon')
+    .row.justify-content-center(id='donateRow')
+      .col.md-6
+        h2 Donating Content
+        p(id='donateParagraph') Money is not the only way to contribute to the platform. If you have a skill and are compelled to contribute pixel art or challenges, DM me on&nbsp;
+          a(href='https://twitter.com/zznop_' target='_blank') twitter!
+
+script(async src='https://c6.patreon.com/becomePatronButton.bundle.js')

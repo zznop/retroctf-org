@@ -1,6 +1,6 @@
 body {
   padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  font: 20px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
 a {
@@ -18,4 +18,16 @@ a {
 
 #newPassDiv {
   margin: 25px 8px 8px 8px;
+}
+
+#challengeJumbotron {
+  margin: 25px 8px 8px 8px;
+}
+
+#donateParagraph {
+  font: 20px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+#donateRow {
+  margin: 25px 0px 0px 0px;
 }

@@ -3,8 +3,8 @@ extends layout
 block content
   .main.container
     .row.justify-content-center
-      .col-md-6.col-md-offset-3
-        div.jumbotron
+      .col-md-12
+        div.jumbotron(id='challengeJumbotron')
           h1.display-4.m-b-2
             a(href='/roms/#{romname}') #{challenge}
           p #{details}
