@@ -4,12 +4,13 @@ const uuidv4 = require('uuid/v4');
 const authUtils = require('../auth-utils');
 const router = express.Router();
 
-router.get('/', function(req, res, next) {
-  if (req.session.authenticated == true) {
-    res.redirect('/');
-    return;
-  }
-
+/**
+ * Handle get request to render the signup page
+ * 
+ * @param  {Request}  req  Client HTTP request.
+ * @param  {Response} res  Server HTTP response.
+ */
+router.get('/', function(req, res) {
   res.render('signup', {
     title: 'Retro CTF',
     status: req.query.status,
@@ -18,8 +19,14 @@ router.get('/', function(req, res, next) {
   });
 });
 
-router.post('/', async function(req, res, next) {
-  if (req.body.password != req.body.confirmpassword) {
+/**
+ * Handle post request containing new account data
+ * 
+ * @param  {Request}  req  Client HTTP request.
+ * @param  {Response} res  Server HTTP response.
+ */
+router.post('/', async function(req, res) {
+  if (req.body.password !== req.body.confirmpassword) {
     res.redirect(
       '/signup?status=' + encodeURIComponent('Passwords are not identical')
     );
@@ -52,7 +59,7 @@ router.post('/', async function(req, res, next) {
   }
 
   // ensure email isn't already in use
-  if (authUtils.emailInUse(req.app.get('pgcli'), req.body.email) == true) {
+  if (authUtils.emailInUse(req.app.get('pgcli'), req.body.email) === true) {
     res.redirect(
       '/signup?status=' + encodeURIComponent('Email already in use')
     );
@@ -60,11 +67,11 @@ router.post('/', async function(req, res, next) {
   }
 
   // ensure username isn't already in use
-  const query = await req.app.get('pgcli').query(
+  let query = await req.app.get('pgcli').query(
     'SELECT * FROM users WHERE username = $1', [req.body.username]
   );
 
-  if (query.rows.length != 0) {
+  if (query.rows.length !== 0) {
     res.redirect(
       '/signup?status=' + encodeURIComponent('Username already exists')
     );
@@ -81,7 +88,7 @@ router.post('/', async function(req, res, next) {
     'VALUES ($1, $2, $3, $4, $5, $6)',
     [
       uuid, req.body.username, req.body.email.toLowerCase(),
-      hash, 0, true
+      hash, 0, 'true'
     ]
   );
 

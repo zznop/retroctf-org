@@ -1,20 +1,34 @@
 const express = require('express');
 const router = express.Router();
 
+/**
+ * Determine if the logged in user has solved the challenge, or not
+ * 
+ * @param  {pg.Client} cli Postgres client object.
+ * @param  {String}    uid User ID.
+ * @param  {Integer}   cid Challenge ID.
+ * @return {Boolean}   True if user solved the challenge, otherwise false.
+ */
 async function isSolved(cli, uid, cid) {
   const query = await cli.query(
     'SELECT * FROM solves WHERE uid = $1 and cid = $2',
     [uid, cid],
   );
 
-  if (query.rows.length != 0) {
+  if (query.rows.length !== 0) {
     return true;
   }
 
   return false;
 }
 
-async function renderChallenge(req, res, path) {
+/**
+ * Render the challenge page
+ *
+ * @param  {Request}  req  Client HTTP request.
+ * @param  {Response} res  Server HTTP response.
+ */
+async function renderChallenge(req, res) {
   const urlArr = req.originalUrl.split('/');
   const route = urlArr[urlArr.length-1].split('?')[0];
   let query = await req.app.get('pgcli').query(
@@ -22,7 +36,7 @@ async function renderChallenge(req, res, path) {
     [route]
   );
 
-  if (query.rows.length == 0) {
+  if (query.rows.length === 0) {
     res.status(404).render('404.jade');
     return;
   }
@@ -44,7 +58,18 @@ async function renderChallenge(req, res, path) {
   });
 }
 
-router.post('/*', async function(req, res, path) {
+/**
+ * Handle post request for a challenge flag submission
+ *
+ * @param  {Request}  req  Client HTTP request.
+ * @param  {Response} res  Server HTTP response.
+ */
+router.post('/*', async function(req, res) {
+  if (!req.session || !req.session.authenticated) {
+    res.redirect('/login');
+    return;
+  }
+
   const urlArr = req.originalUrl.split('/');
   const route = urlArr[urlArr.length-1]
   let query = await req.app.get('pgcli').query(
@@ -52,7 +77,7 @@ router.post('/*', async function(req, res, path) {
     [route]
   );
 
-  if (!req.body.flag || (query.rows[0].flag != req.body.flag.toLowerCase())) {
+  if (!req.body.flag || (query.rows[0].flag !== req.body.flag.toLowerCase())) {
     res.redirect('/challenge/' + route + '?errmsg=' + encodeURIComponent('Nope.'));
     return;
   }
@@ -66,11 +91,18 @@ router.post('/*', async function(req, res, path) {
   res.redirect('/challenge/' + route);
 });
 
-router.get('/*', function(req, res, next) {
-  if (!req.session || !req.session.authenticated)
+/**
+ * Handle get request and render a challenge page
+ *
+ * @param  {Request}  req  Client HTTP request.
+ * @param  {Response} res  Server HTTP response.
+ */
+router.get('/*', function(req, res) {
+  if (!req.session || !req.session.authenticated) {
     res.redirect('/login');
-  else
+  } else {
     renderChallenge(req, res);
+  }
 });
 
 module.exports = router;

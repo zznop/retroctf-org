@@ -3,9 +3,15 @@ const crypto = require('crypto');
 const authUtils = require('../auth-utils');
 const router = express.Router();
 
-router.get('/', async function(req, res, next) {
-  if (req.session.authenticated != true) {
-    res.redirect('/');
+/**
+ * Handle get request for the user accounts page
+ *
+ * @param  {Request}  req  Client HTTP request.
+ * @param  {Response} res  Server HTTP response.
+ */
+router.get('/', async function(req, res) {
+  if (!req.session || !req.session.authenticated) {
+    res.redirect('/login');
     return;
   }
 
@@ -13,9 +19,9 @@ router.get('/', async function(req, res, next) {
     'SELECT * FROM users WHERE id = $1', [req.session.uuid]
   );
 
-  let username = undefined;
-  let email = undefined;
-  if (query.rows.length != 0) {
+  let username;
+  let email;
+  if (query.rows.length !== 0) {
     username = query.rows[0].username;
     email = query.rows[0].email;
   }
@@ -31,7 +37,18 @@ router.get('/', async function(req, res, next) {
   });
 });
 
-router.post('/newpass', async function(req, res, next) {
+/**
+ * Handle post request containing new password data
+ * 
+ * @param  {Request}  req  Client HTTP request.
+ * @param  {Response} res  Server HTTP response.
+ */
+router.post('/newpass', async function(req, res) {
+  if (!req.session || !req.session.authenticated) {
+    res.redirect('/login');
+    return;
+  }
+
   if (req.body.newpassword.length < 8) {
     res.redirect(
       '/account?passwordStatus=' +
@@ -40,7 +57,7 @@ router.post('/newpass', async function(req, res, next) {
     return;
   }
 
-  if (req.body.newpassword != req.body.confirmpassword) {
+  if (req.body.newpassword !== req.body.confirmpassword) {
     res.redirect(
       '/account?passwordStatus=' +
       encodeURIComponent('Confirmation password must match the new password!')
@@ -53,7 +70,7 @@ router.post('/newpass', async function(req, res, next) {
 
   const currPassHash =
     crypto.createHash('sha256').update(req.body.currpassword).digest('hex');
-  if (query.rows[0].password != currPassHash) {
+  if (query.rows[0].password !== currPassHash) {
     res.redirect(
       '/account?passwordStatus=' + encodeURIComponent('Current password is incorrect')
     );
@@ -73,15 +90,21 @@ router.post('/newpass', async function(req, res, next) {
   );
 });
 
-router.post('/newemail', async function(req, res, next) {
-  if (authUtils.validateEmail(req.body.email) == false) {
+/**
+ * Handle post request containing new email data
+ * 
+ * @param  {Request}  req  Client HTTP request.
+ * @param  {Response} res  Server HTTP response.
+ */
+router.post('/newemail', async function(req, res) {
+  if (authUtils.validateEmail(req.body.email) === false) {
     res.redirect(
       '/account?emailStatus=' + encodeURIComponent('Invalid email')
     );
     return;
   }
 
-  if (authUtils.emailInUse(req.app.get('pgcli'), req.body.email) == true) {
+  if (authUtils.emailInUse(req.app.get('pgcli'), req.body.email) === true) {
     res.redirect(
       '/account?emailStatus=' + encodeURIComponent('Email already in use')
     );
@@ -93,7 +116,7 @@ router.post('/newemail', async function(req, res, next) {
   );
 
   const hash = crypto.createHash('sha256').update(req.body.password).digest('hex');
-  if (query.rows[0].password != hash) {
+  if (query.rows[0].password !== hash) {
     res.redirect(
       '/account?emailStatus=' + encodeURIComponent('Password is incorrect')
     );

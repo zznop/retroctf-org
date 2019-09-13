@@ -3,7 +3,13 @@ const crypto = require('crypto');
 const authUtils = require('../auth-utils');
 const router = express.Router();
 
-router.get('/', function(req, res, next) {
+/**
+ * Handle get request to login page
+ * 
+ * @param  {Request}  req  Client HTTP request.
+ * @param  {Response} res  Server HTTP response.
+ */
+router.get('/', function(req, res) {
   res.render('login', {
     title: 'Retro CTF',
     status: req.query.status,
@@ -12,7 +18,13 @@ router.get('/', function(req, res, next) {
   });
 });
 
-router.post('/', async function(req, res, next) {
+/**
+ * Handle post request containing login data
+ * 
+ * @param  {Request}  req  Client HTTP request.
+ * @param  {Response} res  Server HTTP response.
+ */
+router.post('/', async function(req, res) {
   if (!authUtils.validateEmail(req.body.email)) {
     res.redirect(
       '/login?status=' + encodeURIComponent('Invalid email')
@@ -26,7 +38,7 @@ router.post('/', async function(req, res, next) {
   );
 
   // redirect if the email doesn't exist
-  if (query.rows.length == 0) {
+  if (query.rows.length === 0) {
     res.redirect(
       '/login?status=' + encodeURIComponent('Email does not exist')
     );
@@ -35,14 +47,14 @@ router.post('/', async function(req, res, next) {
 
   // hash the password and compare it
   let hash = crypto.createHash('sha256').update(req.body.password).digest('hex');
-  if (query.rows[0].password != hash) {
+  if (query.rows[0].password !== hash) {
     res.redirect('/login?status=' + encodeURIComponent('Incorrect password'));
     return;
   }
 
   req.session.authenticated = true;
   req.session.uuid = query.rows[0].id;
-  if (query.rows[0].role == 1) {
+  if (query.rows[0].role === 1) {
     req.session.admin = true;
   } else {
     req.session.admin = false;

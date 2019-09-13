@@ -12,6 +12,7 @@
     "express-session": "^1.16.2",
     "http-errors": "~1.6.3",
     "jade": "~1.11.0",
+    "jshint": "^2.10.2",
     "morgan": "~1.9.1",
     "pg": "^7.12.1",
     "uuid": "^3.3.2"

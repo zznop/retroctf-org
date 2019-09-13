@@ -14,11 +14,18 @@ const jump = {
   'flag': 'flag{b0bf0b43681eb9565caac9209cef8ffab73e2274}'
 }
 
+/**
+ * Drop all of the tables
+ */
 async function dropTables() {
   await pgClient.query('DROP TABLE users');
   await pgClient.query('DROP TABLE challenges');
+  await pgClient.query('DROP TABLE solves');
 }
 
+/**
+ * Create the tables and populate the challenges
+ */
 async function setupDatabase() {
   try {
     await pgClient.query(
@@ -46,9 +53,9 @@ async function setupDatabase() {
       'description, longdescription, flag) ' +
       'VALUES ($1, $2, $3, $4, $5, $6, $7, $8)',
       [
-        1, jump['challname'], jump['filename'],
-        jump['route'], jump['author'], jump['description'],
-        jump['longdescription'], jump['flag']
+        1, jump.challname, jump.filename,
+        jump.route, jump.author, jump.description,
+        jump.longdescription, jump.flag
       ]
     );
 
