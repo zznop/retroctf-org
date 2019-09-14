@@ -29,7 +29,6 @@ router.get('/', async function(req, res) {
   }
 
   res.render('scoreboard', {
-    title: 'Retro CTF',
     authenticated: req.session.authenticated,
     solvers: solves.rows
   });

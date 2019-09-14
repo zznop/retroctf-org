@@ -11,10 +11,8 @@ const router = express.Router();
  */
 router.get('/', function(req, res) {
   res.render('login', {
-    title: 'Retro CTF',
     status: req.query.status,
     authenticated: req.session.authenticated,
-    isAdmin: req.session.admin,
   });
 });
 
@@ -25,17 +23,18 @@ router.get('/', function(req, res) {
  * @param  {Response} res  Server HTTP response.
  */
 router.post('/', async function(req, res) {
-  if (!authUtils.validateEmail(req.body.email)) {
-    res.redirect(
-      '/login?status=' + encodeURIComponent('Invalid email')
+  let query;
+  if (!authUtils.validateEmail(req.body.user)) {
+    query = await req.app.get('pgcli').query(
+      'SELECT * FROM users WHERE username = $1',
+      [String(req.body.user).toLowerCase()]
     );
-    return;
+  } else {
+    query = await req.app.get('pgcli').query(
+      'SELECT * FROM users WHERE email = $1',
+      [String(req.body.user).toLowerCase()]
+    );
   }
-
-  // query credentials from supplied email
-  let query = await req.app.get('pgcli').query(
-    'SELECT * FROM users WHERE email = $1', [String(req.body.email).toLowerCase()]
-  );
 
   // redirect if the email doesn't exist
   if (query.rows.length === 0) {

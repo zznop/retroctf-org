@@ -31,3 +31,9 @@ a {
 #donateRow {
   margin: 25px 0px 0px 0px;
 }
+
+input.form-control::placeholder {
+  color: #b8b8b8;
+  opacity: 1;
+}
+

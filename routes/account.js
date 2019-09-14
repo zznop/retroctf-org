@@ -27,11 +27,9 @@ router.get('/', async function(req, res) {
   }
 
   res.render('account', {
-    title: 'Retro CTF',
     emailStatus: req.query.emailStatus,
     passwordStatus: req.query.passwordStatus,
     authenticated: req.session.authenticated,
-    isAdmin: req.session.admin,
     email: email,
     username: username,
   });

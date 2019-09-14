@@ -14,9 +14,7 @@ router.get('/', function(req, res) {
   }
 
   res.render('donate', {
-    title: 'Retro CTF',
     authenticated: req.session.authenticated,
-    isAdmin: req.session.admin,
   });
 });
 

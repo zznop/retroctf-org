@@ -46,7 +46,6 @@ async function renderChallenge(req, res) {
   );
 
   res.render('challenge', {
-    title: 'Retro CTF',
     challenge: query.rows[0].challname,
     route: route,
     details: query.rows[0].longdescription,
@@ -54,7 +53,6 @@ async function renderChallenge(req, res) {
     solved: solved,
     authenticated: req.session.authenticated,
     errmsg: req.query.errmsg,
-    isAdmin: req.session.admin,
   });
 }
 

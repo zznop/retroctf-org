@@ -5,6 +5,7 @@ const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const logger = require('morgan');
 const pg = require('pg');
+const favicon = require('serve-favicon');
 const config = require('./config');
 
 // Connect to database
@@ -51,6 +52,9 @@ app.use('/challenge', challengeRouter);
 app.use('/account', accountRouter);
 app.use('/donate', donateRouter);
 app.use('/scoreboard', scoreboardRouter);
+
+// serve the favicon
+app.use(favicon(__dirname + '/public/images/favicon.ico'));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

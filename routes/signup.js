@@ -12,10 +12,8 @@ const router = express.Router();
  */
 router.get('/', function(req, res) {
   res.render('signup', {
-    title: 'Retro CTF',
     status: req.query.status,
     authenticated: req.session.authenticated,
-    isAdmin: req.session.admin,
   });
 });
 

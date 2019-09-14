@@ -21,12 +21,8 @@ exports.validateEmail = function(email) {
  * @return {Boolean}          True if the username is valid, otherwise false.
  */
 exports.validateUsername = function(username) {
-  const re = /^[a-zA-Z0-9]+$/;
-
-  if (username.length > 64) {
-    return false;
-  }
-
+  // https://stackoverflow.com/questions/12018245/regular-expression-to-validate-username
+  const re = /^(?=.{8,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$/;
   return re.test(String(username));
 }
 
@@ -39,7 +35,8 @@ exports.validateUsername = function(username) {
  */
 exports.emailInUse = async function(cli, email) {
   const query = await cli.query(
-    'SELECT * FROM users WHERE email = $1', [email.toLowerCase()]
+    'SELECT * FROM users WHERE email = $1',
+    [email.toLowerCase()]
   );
 
   if (query.rows.length !== 0) {

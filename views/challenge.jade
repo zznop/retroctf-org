@@ -11,9 +11,9 @@ block content
           form(method='POST' action='/challenge/#{route}')
             div.form-group
               if solved
-                input.form-control(type='text' id='flag' name='flag' placeholder='flag{d9a7eae0525603bead5ada6043110aa9de433064}' disabled)
+                input.form-control(type='text' id='flag' name='flag' placeholder='flag{c4ptur3_th3_fl4g}' disabled)
               else
-                input.form-control(type='text' id='flag' name='flag' placeholder='flag{d9a7eae0525603bead5ada6043110aa9de433064}')
+                input.form-control(type='text' id='flag' name='flag' placeholder='flag{c4ptur3_th3_fl4g}')
             p.text-danger #{errmsg}
             if solved
               button.btn.btn-success(type='submit' disabled) Solved!
