@@ -2,6 +2,7 @@ const express = require('express');
 const crypto = require('crypto');
 const uuidv4 = require('uuid/v4');
 const authUtils = require('../auth-utils');
+const sendMail = require('../send-mail');
 const router = express.Router();
 
 /**
@@ -86,14 +87,22 @@ router.post('/', async function(req, res) {
     'VALUES ($1, $2, $3, $4, $5, $6)',
     [
       uuid, req.body.username, req.body.email.toLowerCase(),
-      hash, 0, 'true'
+      hash, 0, 'false'
     ]
   );
 
-  req.session.uuid = uuid;
-  req.session.authenticated = true;
-  req.session.admin = false;
-  res.redirect('/');
+	if (!sendMail.sendVerificationEmail(req.body.email.toLowerCase(), uuid)) {
+		res.redirect(
+		'/signup?status=' +
+			encodeURIComponent('Failed to send verification email. Contact support.')
+		);
+		return;
+	}
+
+  res.redirect(
+    '/signup?status=' +
+    encodeURIComponent('Account created! Confirm your email.')
+  );
 });
 
 module.exports = router;

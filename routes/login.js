@@ -39,7 +39,16 @@ router.post('/', async function(req, res) {
   // redirect if the email doesn't exist
   if (query.rows.length === 0) {
     res.redirect(
-      '/login?status=' + encodeURIComponent('Email does not exist')
+      '/login?status=' + encodeURIComponent('User does not exist')
+    );
+    return;
+  }
+
+  // Enforce email verification
+  if (query.rows[0].enabled === false) {
+    res.redirect(
+      '/login?status=' +
+      encodeURIComponent('Please verify your email')
     );
     return;
   }

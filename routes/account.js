@@ -132,4 +132,49 @@ router.post('/newemail', async function(req, res) {
   );
 });
 
+/**
+ * Handle account verification
+ * 
+ * @param  {Request}  req  Client HTTP request.
+ * @param  {Response} res  Server HTTP response.
+ */
+router.get('/verify/*', async function(req, res) {
+  const urlArr = req.originalUrl.split('/');
+  const uuid = urlArr[urlArr.length-1]
+
+  let query = await req.app.get('pgcli').query(
+    'SELECT * FROM users WHERE id = $1',
+    [uuid]
+  );
+
+  // Check if the verification request is valid
+  if (query.rows.length === 0) {
+    res.redirect(
+      '/login?status=' + encodeURIComponent('Account does not exist')
+    );
+    return;
+  }
+
+  // Check if the account has been verified already
+  if (query.rows[0].enabled === true) {
+    res.redirect(
+      '/login?status=' +
+      encodeURIComponent('Account has already been verified')
+    );
+    return;
+  }
+
+  // Enable the account
+  query = await req.app.get('pgcli').query(
+    'UPDATE users SET enabled = \'true\' WHERE id = $1',
+    [uuid]
+  );
+
+  // Redirect to login page
+  res.redirect(
+    '/login?status=' +
+    encodeURIComponent('Account verified successfully! Please, sign in.')
+  );
+});
+
 module.exports = router;
