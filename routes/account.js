@@ -170,11 +170,11 @@ router.get('/verify/*', async function(req, res) {
     [uuid]
   );
 
-  // Redirect to login page
-  res.redirect(
-    '/login?status=' +
-    encodeURIComponent('Account verified successfully! Please, sign in.')
-  );
+  // Authenticate the user and redirect
+  req.session.authenticated = true;
+  req.session.uuid = uuid;
+  req.session.admin = false;
+  res.redirect('/');
 });
 
 module.exports = router;

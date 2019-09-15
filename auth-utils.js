@@ -22,7 +22,7 @@ exports.validateEmail = function(email) {
  */
 exports.validateUsername = function(username) {
   // https://stackoverflow.com/questions/12018245/regular-expression-to-validate-username
-  const re = /^(?=.{8,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$/;
+  const re = /^(?=.{4,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$/;
   return re.test(String(username));
 }
 

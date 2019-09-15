@@ -91,18 +91,7 @@ router.post('/', async function(req, res) {
     ]
   );
 
-	if (!sendMail.sendVerificationEmail(req.body.email.toLowerCase(), uuid)) {
-		res.redirect(
-		'/signup?status=' +
-			encodeURIComponent('Failed to send verification email. Contact support.')
-		);
-		return;
-	}
-
-  res.redirect(
-    '/signup?status=' +
-    encodeURIComponent('Account created! Confirm your email.')
-  );
+  sendMail.sendVerificationEmail(req.body.email.toLowerCase(), uuid, res);
 });
 
 module.exports = router;
